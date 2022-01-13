@@ -1,0 +1,7 @@
+dascore.transform.spectro module
+================================
+
+.. automodule:: dascore.transform.spectro
+   :members:
+   :undoc-members:
+   :show-inheritance:

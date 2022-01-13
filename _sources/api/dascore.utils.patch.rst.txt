@@ -1,0 +1,7 @@
+dascore.utils.patch module
+==========================
+
+.. automodule:: dascore.utils.patch
+   :members:
+   :undoc-members:
+   :show-inheritance:

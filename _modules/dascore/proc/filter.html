@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dascore.proc.filter &#8212; dascore 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/nature.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">dascore 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">dascore.proc.filter</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for dascore.proc.filter</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">dascore Filtering module.</span>
+
+<span class="sd">Much of this code was inspired by ObsPy&#39;s filtering module created by:</span>
+<span class="sd">Tobias Megies, Moritz Beyreuther, Yannik Behr</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">cheb2ord</span><span class="p">,</span> <span class="n">cheby2</span><span class="p">,</span> <span class="n">iirfilter</span><span class="p">,</span> <span class="n">sosfilt</span><span class="p">,</span> <span class="n">sosfiltfilt</span><span class="p">,</span> <span class="n">zpk2sos</span>
+
+<span class="kn">import</span> <span class="nn">dascore</span>
+<span class="kn">from</span> <span class="nn">dascore.constants</span> <span class="kn">import</span> <span class="n">PatchType</span>
+<span class="kn">from</span> <span class="nn">dascore.exceptions</span> <span class="kn">import</span> <span class="n">FilterValueError</span>
+<span class="kn">from</span> <span class="nn">dascore.utils.patch</span> <span class="kn">import</span> <span class="n">patch_function</span>
+
+
+<span class="k">def</span> <span class="nf">_check_filter_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check filter kwargs and return dim name and filter range.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;pass filter requires you specify one dimension and filter range.&quot;</span>
+        <span class="k">raise</span> <span class="n">FilterValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">filt_range</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filt_range</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">filt_range</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;filter range must be a length two sequence not </span><span class="si">{</span><span class="n">filt_range</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="n">FilterValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">filt1</span><span class="p">,</span> <span class="n">filt2</span> <span class="o">=</span> <span class="n">filt_range</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">filt_range</span><span class="p">]):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;pass filter requires at least one filter limit, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;you passed </span><span class="si">{</span><span class="n">filt_range</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">FilterValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dim</span><span class="p">,</span> <span class="n">filt1</span><span class="p">,</span> <span class="n">filt2</span>
+
+
+<span class="k">def</span> <span class="nf">_get_sampling_rate</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get sampling rate, as a float from sampling period along a dimension.&quot;&quot;&quot;</span>
+    <span class="n">d_dim</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;d_</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span>  <span class="c1"># get time in to seconds</span>
+        <span class="n">d_dim</span> <span class="o">=</span> <span class="n">d_dim</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">d_dim</span>
+
+
+<span class="k">def</span> <span class="nf">_check_filter_range</span><span class="p">(</span><span class="n">niquest</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">filt_min</span><span class="p">,</span> <span class="n">filt_max</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simple check on filter parameters.&quot;&quot;&quot;</span>
+    <span class="c1"># ensure filter bounds are within niquest</span>
+    <span class="k">if</span> <span class="n">low</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">((</span><span class="mi">0</span> <span class="o">&gt;</span> <span class="n">low</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">low</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;possible filter bounds are [0, </span><span class="si">{</span><span class="n">niquest</span><span class="si">}</span><span class="s2">] you passed </span><span class="si">{</span><span class="n">filt_min</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="n">FilterValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">high</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">((</span><span class="mi">0</span> <span class="o">&gt;</span> <span class="n">high</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">high</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;possible filter bounds are [0, </span><span class="si">{</span><span class="n">niquest</span><span class="si">}</span><span class="s2">] you passed </span><span class="si">{</span><span class="n">filt_max</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="n">FilterValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">high</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">low</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">high</span> <span class="o">&lt;=</span> <span class="n">low</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Low filter param must be less than high filter param, you passed:&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;filt_min = </span><span class="si">{</span><span class="n">filt_min</span><span class="si">}</span><span class="s2">, filt_max = </span><span class="si">{</span><span class="n">filt_max</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">FilterValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_sos</span><span class="p">(</span><span class="n">sr</span><span class="p">,</span> <span class="n">filt_min</span><span class="p">,</span> <span class="n">filt_max</span><span class="p">,</span> <span class="n">corners</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get second order sections from sampling rate and filter bounds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">niquest</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">sr</span>
+    <span class="n">low</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">filt_min</span><span class="p">)</span> <span class="k">else</span> <span class="n">filt_min</span> <span class="o">/</span> <span class="n">niquest</span>
+    <span class="n">high</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">filt_max</span><span class="p">)</span> <span class="k">else</span> <span class="n">filt_max</span> <span class="o">/</span> <span class="n">niquest</span>
+    <span class="n">_check_filter_range</span><span class="p">(</span><span class="n">niquest</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">filt_min</span><span class="p">,</span> <span class="n">filt_min</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">low</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">high</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>  <span class="c1"># apply bandpass</span>
+        <span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">iirfilter</span><span class="p">(</span>
+            <span class="n">corners</span><span class="p">,</span> <span class="p">[</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">],</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;zpk&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">low</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">iirfilter</span><span class="p">(</span>
+            <span class="n">corners</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;highpass&quot;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;zpk&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">high</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">iirfilter</span><span class="p">(</span>
+            <span class="n">corners</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s2">&quot;butter&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;zpk&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">zpk2sos</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="pass_filter"><a class="viewcode-back" href="../../../api/dascore.proc.filter.html#dascore.proc.filter.pass_filter">[docs]</a><span class="nd">@patch_function</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">pass_filter</span><span class="p">(</span><span class="n">patch</span><span class="p">:</span> <span class="n">PatchType</span><span class="p">,</span> <span class="n">corners</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">zerophase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatchType</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a Butterworth pass filter (bandpass, highpass, or lowpass).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    corners</span>
+<span class="sd">        The number of corners for the filter.</span>
+<span class="sd">    zerophase</span>
+<span class="sd">        If True, apply the filter twice.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Used to specify the dimension and frequency, wavelength, or equivilent</span>
+<span class="sd">        limits.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import dascore</span>
+<span class="sd">    &gt;&gt;&gt; pa = dascore.get_example_patch()</span>
+
+<span class="sd">    &gt;&gt;&gt;  # 1. Apply bandpass filter along time axis from 1 to 100 Hz</span>
+<span class="sd">    &gt;&gt;&gt; bandpassed = pa.pass_filter(time=(1, 100))</span>
+
+<span class="sd">    &gt;&gt;&gt;  # 2. Apply lowpass filter along distance axis for wavelengths less than 1000m</span>
+<span class="sd">    &gt;&gt;&gt; lowpassed = pa.pass_filter(distance=(None, 1/100))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dim</span><span class="p">,</span> <span class="n">filt_min</span><span class="p">,</span> <span class="n">filt_max</span> <span class="o">=</span> <span class="n">_check_filter_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">dims</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+    <span class="n">sr</span> <span class="o">=</span> <span class="n">_get_sampling_rate</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+    <span class="c1"># get niquest and low/high in terms of niquest</span>
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">_get_sos</span><span class="p">(</span><span class="n">sr</span><span class="p">,</span> <span class="n">filt_min</span><span class="p">,</span> <span class="n">filt_max</span><span class="p">,</span> <span class="n">corners</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">zerophase</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dascore</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="n">patch</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">patch</span><span class="o">.</span><span class="n">attrs</span><span class="p">)</span></div>
+
+
+<span class="c1">#</span>
+<span class="c1"># @patch_function()</span>
+<span class="c1"># def stop_filter(patch: PatchType, corners=4, zerophase=True, **kwargs) -&gt; PatchType:</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Apply a Butterworth band stop filter or (highpass, or lowpass).</span>
+<span class="c1">#</span>
+<span class="c1">#     Parameters</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     corners</span>
+<span class="c1">#         The number of corners for the filter.</span>
+<span class="c1">#     zerophase</span>
+<span class="c1">#         If True, apply the filter twice.</span>
+<span class="c1">#     **kwargs</span>
+<span class="c1">#         Used to specify the dimension and frequency, wavenumber, or equivalent</span>
+<span class="c1">#         limits.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     dim, filt_min, filt_max = _check_filter_kwargs(kwargs)</span>
+<span class="c1">#     axis = patch.dims.index(dim)</span>
+<span class="c1">#     sr = _get_sampling_rate(patch, dim)</span>
+<span class="c1">#     # get niquest and low/high in terms of niquest</span>
+<span class="c1">#     sos = _get_sos(sr, filt_min, filt_max, corners)</span>
+<span class="c1">#     out = sosfilt(sos, patch.data, axis=axis)</span>
+<span class="c1">#     if zerophase:</span>
+<span class="c1">#         out = sosfilt(sos, out[::-1])[::-1]</span>
+<span class="c1">#     return dascore.Patch(data=out, coords=patch.coords, attrs=patch.attrs)</span>
+
+
+<span class="k">def</span> <span class="nf">_lowpass_cheby_2</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">maxorder</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cheby2-Lowpass Filter used for pre-conditioning decimation.</span>
+
+<span class="sd">    Based on Obspy&#39;s implementation found here:</span>
+<span class="sd">    https://docs.obspy.org/master/_modules/obspy/signal/filter.html#lowpass_cheby_2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nyquist</span> <span class="o">=</span> <span class="n">df</span> <span class="o">*</span> <span class="mf">0.5</span>
+    <span class="c1"># rp - maximum ripple of passband, rs - attenuation of stopband</span>
+    <span class="n">rp</span><span class="p">,</span> <span class="n">rs</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mf">1e99</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="n">freq</span> <span class="o">/</span> <span class="n">nyquist</span>  <span class="c1"># stop band frequency</span>
+    <span class="n">wp</span> <span class="o">=</span> <span class="n">ws</span>  <span class="c1"># pass band frequency</span>
+    <span class="c1"># raise for some bad scenarios</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="o">&lt;=</span> <span class="n">maxorder</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">wp</span> <span class="o">=</span> <span class="n">wp</span> <span class="o">*</span> <span class="mf">0.99</span>
+        <span class="n">order</span><span class="p">,</span> <span class="n">wn</span> <span class="o">=</span> <span class="n">cheb2ord</span><span class="p">(</span><span class="n">wp</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">rs</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">cheby2</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">rs</span><span class="p">,</span> <span class="n">wn</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;zpk&quot;</span><span class="p">)</span>
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">zpk2sos</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">dascore 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">dascore.proc.filter</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, DASDAE Development Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>

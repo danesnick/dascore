@@ -1,19 +1,19 @@
-fios
+DasCore
 ====
 
-[fi]ber [o]ptic [s]ensing library
+A python library for working with distributed fiber optic sensing data.
 
 `Introduction <markdown/intro.md>`_
 
 `Installation <markdown/installation.md>`_
 
-`Code <https://github.com/dasdae/fios>`_
+`Code <https://github.com/dasdae/dascore>`_
 
 `Contributing <markdown/contributing.md>`_
 
 `Support Bug Reporting <markdown/support.md>`_
 
-`Full API Documentation <api/fios.rst>`_
+`Full API Documentation <api/dascore.rst>`_
 
 :ref:`genindex`
 

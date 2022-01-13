@@ -1,7 +1,0 @@
-fios.proc.select module
-=======================
-
-.. automodule:: fios.proc.select
-   :members:
-   :undoc-members:
-   :show-inheritance:

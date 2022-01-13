@@ -1,0 +1,7 @@
+dascore.io.terra15.core module
+==============================
+
+.. automodule:: dascore.io.terra15.core
+   :members:
+   :undoc-members:
+   :show-inheritance:

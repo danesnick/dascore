@@ -1,0 +1,7 @@
+dascore.utils.time module
+=========================
+
+.. automodule:: dascore.utils.time
+   :members:
+   :undoc-members:
+   :show-inheritance:

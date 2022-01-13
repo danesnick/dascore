@@ -1,0 +1,7 @@
+dascore.utils.plugin module
+===========================
+
+.. automodule:: dascore.utils.plugin
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+dascore.proc.basic module
+=========================
+
+.. automodule:: dascore.proc.basic
+   :members:
+   :undoc-members:
+   :show-inheritance:

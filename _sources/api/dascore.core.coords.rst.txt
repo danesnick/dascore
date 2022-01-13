@@ -1,0 +1,7 @@
+dascore.core.coords module
+==========================
+
+.. automodule:: dascore.core.coords
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+dascore.core.stream module
+==========================
+
+.. automodule:: dascore.core.stream
+   :members:
+   :undoc-members:
+   :show-inheritance:

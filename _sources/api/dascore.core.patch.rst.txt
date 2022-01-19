@@ -1,7 +1,0 @@
-dascore.core.patch module
-=========================
-
-.. automodule:: dascore.core.patch
-   :members:
-   :undoc-members:
-   :show-inheritance:

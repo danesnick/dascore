@@ -1,7 +1,0 @@
-dascore.core.conversions module
-===============================
-
-.. automodule:: dascore.core.conversions
-   :members:
-   :undoc-members:
-   :show-inheritance:

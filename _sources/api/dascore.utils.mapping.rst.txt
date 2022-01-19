@@ -1,7 +1,0 @@
-dascore.utils.mapping module
-============================
-
-.. automodule:: dascore.utils.mapping
-   :members:
-   :undoc-members:
-   :show-inheritance:

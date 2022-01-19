@@ -1,7 +1,0 @@
-dascore.proc.aggregate module
-=============================
-
-.. automodule:: dascore.proc.aggregate
-   :members:
-   :undoc-members:
-   :show-inheritance:

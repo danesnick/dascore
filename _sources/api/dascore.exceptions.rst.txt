@@ -1,7 +1,0 @@
-dascore.exceptions module
-=========================
-
-.. automodule:: dascore.exceptions
-   :members:
-   :undoc-members:
-   :show-inheritance:

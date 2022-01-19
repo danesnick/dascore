@@ -1,7 +1,0 @@
-dascore.io.wav.core module
-==========================
-
-.. automodule:: dascore.io.wav.core
-   :members:
-   :undoc-members:
-   :show-inheritance:

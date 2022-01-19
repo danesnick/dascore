@@ -1,7 +1,0 @@
-dascore.viz.spectrogram module
-==============================
-
-.. automodule:: dascore.viz.spectrogram
-   :members:
-   :undoc-members:
-   :show-inheritance:

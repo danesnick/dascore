@@ -1,7 +1,0 @@
-dascore.transform.strain module
-===============================
-
-.. automodule:: dascore.transform.strain
-   :members:
-   :undoc-members:
-   :show-inheritance:

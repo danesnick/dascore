@@ -1,7 +1,0 @@
-dascore.viz.waterfall module
-============================
-
-.. automodule:: dascore.viz.waterfall
-   :members:
-   :undoc-members:
-   :show-inheritance:

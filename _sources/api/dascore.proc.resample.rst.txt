@@ -1,7 +1,0 @@
-dascore.proc.resample module
-============================
-
-.. automodule:: dascore.proc.resample
-   :members:
-   :undoc-members:
-   :show-inheritance:

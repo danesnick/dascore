@@ -1,7 +1,0 @@
-dascore.io.core module
-======================
-
-.. automodule:: dascore.io.core
-   :members:
-   :undoc-members:
-   :show-inheritance:

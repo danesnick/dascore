@@ -1,7 +1,0 @@
-dascore.version module
-======================
-
-.. automodule:: dascore.version
-   :members:
-   :undoc-members:
-   :show-inheritance:

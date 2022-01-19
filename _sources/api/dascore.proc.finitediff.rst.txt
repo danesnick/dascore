@@ -1,7 +1,0 @@
-dascore.proc.finitediff module
-==============================
-
-.. automodule:: dascore.proc.finitediff
-   :members:
-   :undoc-members:
-   :show-inheritance:

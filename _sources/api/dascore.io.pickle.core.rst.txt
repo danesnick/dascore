@@ -1,7 +1,0 @@
-dascore.io.pickle.core module
-=============================
-
-.. automodule:: dascore.io.pickle.core
-   :members:
-   :undoc-members:
-   :show-inheritance:

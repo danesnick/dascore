@@ -1,7 +1,0 @@
-dascore.utils.saveload module
-=============================
-
-.. automodule:: dascore.utils.saveload
-   :members:
-   :undoc-members:
-   :show-inheritance:

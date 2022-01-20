@@ -1,0 +1,7 @@
+dascore.proc.detrend module
+===========================
+
+.. automodule:: dascore.proc.detrend
+   :members:
+   :undoc-members:
+   :show-inheritance:

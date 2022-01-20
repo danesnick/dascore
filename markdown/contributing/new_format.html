@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Adding Support for a File Format &#8212; DASCore 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="adding-support-for-a-file-format">
+<h1>Adding Support for a File Format<a class="headerlink" href="#adding-support-for-a-file-format" title="Permalink to this headline">¶</a></h1>
+<p>Several steps are required to add support for a new file format. To demonstrate, imagine adding support for a
+format called <code class="docutils literal notranslate"><span class="pre">jingle</span></code> which conventionally uses a file extension of <code class="docutils literal notranslate"><span class="pre">jgl</span></code>.</p>
+<section id="adding-a-new-io-module">
+<h2>Adding a New IO Module<a class="headerlink" href="#adding-a-new-io-module" title="Permalink to this headline">¶</a></h2>
+<p>First, we create a new io module called ‘jingle’ in DASCore’s io module (dascore/io/jingle).
+Make sure there is a <strong>init</strong>.py file in this module whose docstring describes the format.</p>
+<p>contents of <code class="docutils literal notranslate"><span class="pre">dascore/io/jingle/__init__.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Jingle format support module.</span>
+
+<span class="sd">Jingle is a really cool new format which supports all the &quot;bells&quot; and whistles</span>
+<span class="sd">people need for working with das data.</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+<span class="sd">import dascore as dc</span>
+
+<span class="sd">jingle = dc.read(&#39;path_to_file.jgl&#39;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Next, create a <code class="docutils literal notranslate"><span class="pre">core.py</span></code> file in the new module (dascore/io/jingle/core.py). Start by creating
+a class called <code class="docutils literal notranslate"><span class="pre">JingleIO</span></code>,  which subclasses `dascore.io.core.FiberIO, and implement the supported
+methods.</p>
+<p>Contents of <code class="docutils literal notranslate"><span class="pre">dascore/io/jingle/core.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Core module for jingle file format support.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">dascore.exceptions</span>
+<span class="kn">from</span> <span class="nn">dascore.io.core</span> <span class="kn">import</span> <span class="n">FiberIO</span>
+
+
+<span class="k">class</span> <span class="nc">JingleIO</span><span class="p">(</span><span class="n">FiberIO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An IO class supporting the jingle format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># you must specify the format name using the name attribute</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;jingle&#39;</span>
+    <span class="c1"># you can also define which file extensions are expected like so.</span>
+    <span class="c1"># this will speed up determining the formats of files if not specified.</span>
+    <span class="n">preferred_extensions</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;jgl&#39;</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">jingle_param</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read should take, at least, a path and return a patch or sequence of patches.</span>
+
+<span class="sd">        It can also define its own parameters, and should always accept kwargs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">is_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to determine if path is a supported jingle file.</span>
+
+<span class="sd">        Returns a tuple of (format_name, version_number) if the file is a</span>
+<span class="sd">        supported jingle file, else return False or raise a</span>
+<span class="sd">        dascore.exceptions.UnknownFiberFormat.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">scan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to gather metadata about a file without reading in the whole file.</span>
+
+<span class="sd">        This should return a list of dictionaries with the keys/types specified</span>
+<span class="sd">        in dascore.constants.SUMMARY_KEYS.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a patch or spool back to disk in the jingle format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>All of the 4 methods are optional; some formats will only support reading,
+others only writing. <code class="docutils literal notranslate"><span class="pre">is_format</span></code> is fairly important otherwise the format
+wont be auto-detectable.</p>
+</section>
+<section id="writing-tests">
+<h2>Writing Tests<a class="headerlink" href="#writing-tests" title="Permalink to this headline">¶</a></h2>
+<p>Next we need to write tests for the format (you weren’t thinking of skipping
+this step were you!?). The tests should go in: <code class="docutils literal notranslate"><span class="pre">test/test_io/test_jingle.py</span></code>.
+The hardest part is finding a <em>small</em> (typically no more than 1-2 mb) file to
+include in the test suite. Assuming you have found, or manufactured, such
+as file, it should go into <a class="reference external" href="https://github.com/DASDAE/test_data">dasdae’s data repo</a>.
+Simply clone the repo, add you file format, and push back to master or open a
+PR on a separate branch.</p>
+<p>Next, add your file to dascore’s data registry (dascore/data_registry.txt).
+You will have to get the sha256 hash of your test file, for that you can simply
+use <a class="reference external" href="https://www.fatiando.org/pooch/latest/api/generated/pooch.file_hash.html">Pooch’s hash_file function</a>,
+and you can create the proper download url using the other entries as examples.</p>
+<p>The name, hash, and url might look  something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jingle_test_file</span><span class="o">.</span><span class="n">jgl</span>
+<span class="mf">12e087</span><span class="n">d2c1cd08c9afd18334e17e21787be0b646151b39802541ee11a516976a</span>
+<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dasdae</span><span class="o">/</span><span class="n">test_data</span><span class="o">/</span><span class="n">raw</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">das</span><span class="o">/</span><span class="n">jingle_test_file</span><span class="o">.</span><span class="n">jgl</span>
+</pre></div>
+</div>
+<p>Then your test file might look like this:</p>
+<p>contents of tests/test_io/test_jingle.py</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">import</span> <span class="nn">dascore</span>
+<span class="kn">from</span> <span class="nn">dascore.utils.downloader</span> <span class="kn">import</span> <span class="n">fetch</span>
+
+<span class="k">class</span> <span class="nc">TestJingleIO</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Tests for jingle IO format.&quot;&quot;&quot;</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">jingle_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the path to the test jingle file.&quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;jingle_test_file.jgl&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span>
+
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">jingle_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jingle_file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read the jingle test data&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">dascore</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">jingle_file_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;jingle&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jingle_file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Ensure the test file can be read.&quot;&quot;&quot;</span>
+        <span class="c1"># fetch will download the file (if not already downloaded) and</span>
+        <span class="c1"># test read without specifying format</span>
+        <span class="n">out1</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">jingle_file_path</span><span class="p">)</span>
+        <span class="c1"># next assert things about the output, maybe len, attributes etc.</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">out1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="c1"># test read specifying format</span>
+        <span class="n">out2</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">jingle_file_path</span><span class="p">,</span> <span class="s1">&#39;jingle&#39;</span><span class="p">)</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path_factory</span><span class="p">,</span> <span class="n">jingle_patch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Ensure jingle format can be written.&quot;&quot;&quot;</span>
+        <span class="n">out_path</span> <span class="o">=</span> <span class="n">tmp_path_factory</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="s1">&#39;jingle&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;jingle_test.jgl&#39;</span>
+        <span class="n">jingle_patch</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">jingle_patch</span><span class="p">,</span> <span class="n">out_path</span><span class="p">)</span>
+        <span class="c1"># make sure the new file exists and has a size</span>
+        <span class="k">assert</span> <span class="n">out_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">out_path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">test_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jingle_file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests for scanning a jingle file&quot;&quot;&quot;</span>
+        <span class="n">scan</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">scan_file</span><span class="p">(</span><span class="n">jingle_file_path</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">scan</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">test_is_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jingle_file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tests for automatically determining a jingle format.&quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">get_format</span><span class="p">(</span><span class="n">jingle_file_path</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;jingle&#39;</span>
+
+</pre></div>
+</div>
+</section>
+<section id="register-plugin">
+<h2>Register Plugin<a class="headerlink" href="#register-plugin" title="Permalink to this headline">¶</a></h2>
+<p>Now that the Jingle format support is implemented and tested, the final step is to
+register jingle as an entry point in the setup.cfg. This is done under
+options.entry_points in the dascore.plugin.fiber_io namespace. For example,
+after adding jingle the setup.cfg section might look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">options</span><span class="o">.</span><span class="n">entry_points</span><span class="p">]</span>
+<span class="n">dascore</span><span class="o">.</span><span class="n">plugin</span><span class="o">.</span><span class="n">fiber_io</span> <span class="o">=</span>
+    <span class="n">TERRA15</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">terra15</span><span class="o">.</span><span class="n">core</span><span class="p">:</span><span class="n">Terra15Formatter</span>
+    <span class="n">PICKLE</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">pickle</span><span class="o">.</span><span class="n">core</span><span class="p">:</span><span class="n">PickleIO</span>
+    <span class="n">WAV</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">core</span><span class="p">:</span><span class="n">WavIO</span>
+    <span class="n">JINGLE</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">jingle</span><span class="o">.</span><span class="n">core</span><span class="p">:</span><span class="n">JingleIO</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../../index.html">DASCore</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../executable/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/dasdae/dascore">Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DASDAE Development Team.
+      
+    </div>
+
+    
+    <a href="https://github.com/DASDAE/dascore" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

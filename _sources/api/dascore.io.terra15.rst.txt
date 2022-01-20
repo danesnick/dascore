@@ -1,0 +1,16 @@
+dascore.io.terra15 package
+==========================
+
+.. automodule:: dascore.io.terra15
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   dascore.io.terra15.core
+   dascore.io.terra15.utils

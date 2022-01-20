@@ -1,0 +1,31 @@
+dascore package
+===============
+
+.. automodule:: dascore
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   dascore.core
+   dascore.io
+   dascore.proc
+   dascore.transform
+   dascore.utils
+   dascore.viz
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   dascore.constants
+   dascore.examples
+   dascore.exceptions
+   dascore.version

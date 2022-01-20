@@ -1,0 +1,15 @@
+dascore.io.pickle package
+=========================
+
+.. automodule:: dascore.io.pickle
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   dascore.io.pickle.core

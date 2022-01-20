@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>dascore.utils.docs module &#8212; DASCore 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="dascore.utils.downloader module" href="dascore.utils.downloader.html" />
+    <link rel="prev" title="dascore.utils package" href="dascore.utils.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-dascore.utils.docs">
+<span id="dascore-utils-docs-module"></span><h1>dascore.utils.docs module<a class="headerlink" href="#module-dascore.utils.docs" title="Permalink to this headline">¶</a></h1>
+<p>Utilities for documentation.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.docs.compose_docstring">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.docs.</span></span><span class="sig-name descname"><span class="pre">compose_docstring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/docs.html#compose_docstring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.docs.compose_docstring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for composing docstrings.</p>
+<p>This allows components of docstrings which are often repeated to be
+specified in a single place. Values provided to this function should
+have string keys and string or list values. Keys are found in curly
+brackets in the wrapped functions docstring and their values are
+substituted with proper indentation.</p>
+<p class="rubric">Notes</p>
+<p>A function’s docstring can be accessed via the <cite>__docs__</cite> attribute.</p>
+<p class="rubric">Examples</p>
+<p>&#64;compose_docstring(some_value=’10’)
+def example_function():</p>
+<blockquote>
+<div><p>‘’’
+Some useful description</p>
+<p>The following line will be the string ‘10’:
+{some_value}
+‘’’</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>Sequence</em><em>[</em><em>str</em><em>]</em><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.docs.format_dtypes">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.docs.</span></span><span class="sig-name descname"><span class="pre">format_dtypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/docs.html#format_dtypes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.docs.format_dtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dictionary of {name: type} to a string printable format for
+displaying in docstrings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dtype_dict</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]) – A dict of columns (keys) and values (dtypes).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>A string formatted for <a class="reference internal" href="#dascore.utils.docs.compose_docstring" title="dascore.utils.docs.compose_docstring"><code class="xref py py-func docutils literal notranslate"><span class="pre">dascore.utils.docs.compose_docstring()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">DASCore</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../markdown/executable/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../markdown/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/dasdae/dascore">Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../markdown/contributing/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../markdown/support.html">Support</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">dascore</a><ul>
+  <li><a href="dascore.html">dascore package</a><ul>
+  <li><a href="dascore.utils.html">dascore.utils package</a><ul>
+      <li>Previous: <a href="dascore.utils.html" title="previous chapter">dascore.utils package</a></li>
+      <li>Next: <a href="dascore.utils.downloader.html" title="next chapter">dascore.utils.downloader module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DASDAE Development Team.
+      
+    </div>
+
+    
+    <a href="https://github.com/DASDAE/dascore" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

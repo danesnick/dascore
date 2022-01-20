@@ -1,0 +1,7 @@
+dascore.viz.core module
+=======================
+
+.. automodule:: dascore.viz.core
+   :members:
+   :undoc-members:
+   :show-inheritance:

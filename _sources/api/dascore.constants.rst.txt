@@ -1,0 +1,7 @@
+dascore.constants module
+========================
+
+.. automodule:: dascore.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:

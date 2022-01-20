@@ -1,0 +1,7 @@
+dascore.transform.fft module
+============================
+
+.. automodule:: dascore.transform.fft
+   :members:
+   :undoc-members:
+   :show-inheritance:

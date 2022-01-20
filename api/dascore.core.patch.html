@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>dascore.core.patch module &#8212; DASCore 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="dascore.core.stream module" href="dascore.core.stream.html" />
+    <link rel="prev" title="dascore.core package" href="dascore.core.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-dascore.core.patch">
+<span id="dascore-core-patch-module"></span><h1>dascore.core.patch module<a class="headerlink" href="#module-dascore.core.patch" title="Permalink to this headline">¶</a></h1>
+<p>A 2D trace object.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dascore.core.patch.</span></span><span class="sig-name descname"><span class="pre">Patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/core/patch.html#Patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.core.patch.Patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Class for storing and accessing 2D fiber data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>numpy.typing._array_like._SupportsArray</em><em>[</em><em>numpy.dtype</em><em>]</em><em>, </em><em>numpy.typing._nested_sequence._NestedSequence</em><em>[</em><em>numpy.typing._array_like._SupportsArray</em><em>[</em><em>numpy.dtype</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>complex</em><em>, </em><em>str</em><em>, </em><em>bytes</em><em>, </em><em>numpy.typing._nested_sequence._NestedSequence</em><em>[</em><em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>complex</em><em>, </em><em>str</em><em>, </em><em>bytes</em><em>]</em><em>]</em><em>, </em><em>xarray.core.dataarray.DataArray</em><em>]</em>) – </p></li>
+<li><p><strong>coords</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>numpy.typing._array_like._SupportsArray</em><em>[</em><em>numpy.dtype</em><em>]</em><em>, </em><em>numpy.typing._nested_sequence._NestedSequence</em><em>[</em><em>numpy.typing._array_like._SupportsArray</em><em>[</em><em>numpy.dtype</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>complex</em><em>, </em><em>str</em><em>, </em><em>bytes</em><em>, </em><em>numpy.typing._nested_sequence._NestedSequence</em><em>[</em><em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>complex</em><em>, </em><em>str</em><em>, </em><em>bytes</em><em>]</em><em>]</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>dims</strong> (<em>Tuple</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>attrs</strong> (<em>Optional</em><em>[</em><em>Mapping</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.abs">
+<span class="sig-name descname"><span class="pre">abs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.abs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take the absolute value of the patch data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate values patch along a specified dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The dimension along which aggregations are to be performed.</p></li>
+<li><p><strong>method</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[‘mean’, ‘median’, ‘min’, ‘max’, ‘first’, ‘last’]) – <dl class="simple">
+<dt>The aggregation to apply along dimension. Options are:</dt><dd><p>mean, min, max, median, first, last</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dascore.constants.PatchType</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+<li><p><strong>dim</strong> (<em>str</em>) – </p></li>
+<li><p><strong>method</strong> (<em>Literal</em><em>[</em><em>'mean'</em><em>, </em><em>'median'</em><em>, </em><em>'min'</em><em>, </em><em>'max'</em><em>, </em><em>'first'</em><em>, </em><em>'last'</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="dascore.utils.mapping.html#dascore.utils.mapping.FrozenDict" title="dascore.utils.mapping.FrozenDict"><span class="pre">dascore.utils.mapping.FrozenDict</span></a></em><a class="headerlink" href="#dascore.core.patch.Patch.attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the attributes of the trace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="dascore.utils.mapping.html#dascore.utils.mapping.FrozenDict" title="dascore.utils.mapping.FrozenDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">FrozenDict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.coords">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coords</span></span><a class="headerlink" href="#dascore.core.patch.Patch.coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the data array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dascore.core.patch.Patch.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the data array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.decimate">
+<span class="sig-name descname"><span class="pre">decimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowpass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.decimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decimate a patch along a dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factor</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The decimation factor (e.g., 10)</p></li>
+<li><p><strong>dim</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – dimension along which to decimate.</p></li>
+<li><p><strong>lowpass</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, first apply a low-pass (anti-alis) filter. Uses
+<code class="xref py py-func docutils literal notranslate"><span class="pre">dascore.proc.filter._lowpass_cheby_2()</span></code></p></li>
+<li><p><strong>copy</strong> – If True, copy the decimated data array. This is needed if you want
+the old array to get gc’ed to free memory otherwise a view is returned.</p></li>
+<li><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>~PatchType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.detrend">
+<span class="sig-name descname"><span class="pre">detrend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.detrend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform detrending along a given dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dascore.core.patch.Patch.dims" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the data array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, …]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.equals">
+<span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_required_attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/core/patch.html#Patch.equals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.core.patch.Patch.equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the current trace equals the other trace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<em>~PatchType</em>) – A Trace2D object</p></li>
+<li><p><strong>only_required_attrs</strong> – If True, only compare required attributes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.iloc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">iloc</span></span><a class="headerlink" href="#dascore.core.patch.Patch.iloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an index locator for selecting based on index, not values.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.io">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">io</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="dascore.io.html#dascore.io.PatchIO" title="dascore.io.PatchIO"><span class="pre">dascore.io.PatchIO</span></a></em><a class="headerlink" href="#dascore.core.patch.Patch.io" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a patch IO object for saving patches to various formats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="dascore.io.html#dascore.io.PatchIO" title="dascore.io.PatchIO"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatchIO</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.load_pickle">
+<span class="sig-name descname"><span class="pre">load_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.load_pickle" title="Permalink to this definition">¶</a></dt>
+<dd><p>quick and dirty load method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.new">
+<span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/core/patch.html#Patch.new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.core.patch.Patch.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of the trace with data, coords, or attrs updated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>self</strong> (<em>dascore.constants.PatchType</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.pass_filter">
+<span class="sig-name descname"><span class="pre">pass_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corners</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zerophase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.pass_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a Butterworth pass filter (bandpass, highpass, or lowpass).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>corners</strong> – The number of corners for the filter.</p></li>
+<li><p><strong>zerophase</strong> – If True, apply the filter twice.</p></li>
+<li><p><strong>**kwargs</strong> – Used to specify the dimension and frequency, wavelength, or equivilent
+limits.</p></li>
+<li><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dascore.constants.PatchType</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dascore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pa</span> <span class="o">=</span> <span class="n">dascore</span><span class="o">.</span><span class="n">get_example_patch</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span> <span class="c1"># 1. Apply bandpass filter along time axis from 1 to 100 Hz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bandpassed</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">pass_filter</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span> <span class="c1"># 2. Apply lowpass filter along distance axis for wavelengths less than 1000m</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lowpassed</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">pass_filter</span><span class="p">(</span><span class="n">distance</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">100</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.rename">
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename coordinate or dimensions of Patch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>**names</strong> – The mapping from old names to new names</p></li>
+<li><p><strong>self</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dascore.constants.PatchType</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dascore.examples</span> <span class="kn">import</span> <span class="n">get_example_patch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pa</span> <span class="o">=</span> <span class="n">get_example_patch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># rename dim &quot;distance&quot; to &quot;fragrance&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pa2</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">distance</span><span class="o">=</span><span class="s1">&#39;fragrance&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s1">&#39;fragrance&#39;</span> <span class="ow">in</span> <span class="n">pa2</span><span class="o">.</span><span class="n">dims</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>self</strong> (<em>dascore.constants.PatchType</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.save_pickle">
+<span class="sig-name descname"><span class="pre">save_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.save_pickle" title="Permalink to this definition">¶</a></dt>
+<dd><p>quick and dirty save method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a subset of the trace based on query parameters.</p>
+<p>Any dimension of the data can be passed as key, and the values
+should either be a Slice or a tuple of (min, max) for that
+dimension.</p>
+<p>The time dimension is handled specially in that either floats,
+datetime64 or datetime objects can be used to specify relative
+or absolute times, respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>copy</strong> – If True, copy the resulting data. This is needed so the old
+array can get gc’ed and memory freed.</p></li>
+<li><p><strong>**kwargs</strong> – Used to specify the dimension and slices to select on.</p></li>
+<li><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dascore.constants.PatchType</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># select meters 50 to 300</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dascore.examples</span> <span class="kn">import</span> <span class="n">get_example_patch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tr</span> <span class="o">=</span> <span class="n">get_example_patch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">distance</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">300</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.squeeze">
+<span class="sig-name descname"><span class="pre">squeeze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.squeeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new object with len one dimensions flattened.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> – Selects a subset of the length one dimensions. If a dimension
+is selected with length greater than one, an error is raised.
+If None, all length one dimensions are squeezed.</p></li>
+<li><p><strong>drop</strong> – If True, drop squeezed coordinates instead of making them scalar.</p></li>
+<li><p><strong>self</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Simply calls <cite>xr.squeeze</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.tran">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tran</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="dascore.transform.html#dascore.transform.TransformPatchNameSpace" title="dascore.transform.TransformPatchNameSpace"><span class="pre">dascore.transform.TransformPatchNameSpace</span></a></em><a class="headerlink" href="#dascore.core.patch.Patch.tran" title="Permalink to this definition">¶</a></dt>
+<dd><p>The transformation namespace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="dascore.transform.html#dascore.transform.TransformPatchNameSpace" title="dascore.transform.TransformPatchNameSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformPatchNameSpace</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.transpose">
+<span class="sig-name descname"><span class="pre">transpose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dascore.core.patch.Patch.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transpose the data array to any dimension order desired.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*dims</strong> – Dimension names which define the new data axis order.</p></li>
+<li><p><strong>self</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+<li><p><strong>dims</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>~PatchType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.update_attrs">
+<span class="sig-name descname"><span class="pre">update_attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/core/patch.html#Patch.update_attrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.core.patch.Patch.update_attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update attrs and return a new Patch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>**attrs</strong> – attrs to add/update.</p></li>
+<li><p><strong>self</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>~PatchType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dascore.core.patch.Patch.viz">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">viz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="dascore.viz.html#dascore.viz.VizPatchNameSpace" title="dascore.viz.VizPatchNameSpace"><span class="pre">dascore.viz.VizPatchNameSpace</span></a></em><a class="headerlink" href="#dascore.core.patch.Patch.viz" title="Permalink to this definition">¶</a></dt>
+<dd><p>The visualization namespace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="dascore.viz.html#dascore.viz.VizPatchNameSpace" title="dascore.viz.VizPatchNameSpace"><code class="xref py py-class docutils literal notranslate"><span class="pre">VizPatchNameSpace</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../index.html">DASCore</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../markdown/executable/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../markdown/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/dasdae/dascore">Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../markdown/contributing/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../markdown/support.html">Support</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">dascore</a><ul>
+  <li><a href="dascore.html">dascore package</a><ul>
+  <li><a href="dascore.core.html">dascore.core package</a><ul>
+      <li>Previous: <a href="dascore.core.html" title="previous chapter">dascore.core package</a></li>
+      <li>Next: <a href="dascore.core.stream.html" title="next chapter">dascore.core.stream module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DASDAE Development Team.
+      
+    </div>
+
+    
+    <a href="https://github.com/DASDAE/dascore" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

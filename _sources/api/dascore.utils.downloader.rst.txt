@@ -1,0 +1,7 @@
+dascore.utils.downloader module
+===============================
+
+.. automodule:: dascore.utils.downloader
+   :members:
+   :undoc-members:
+   :show-inheritance:

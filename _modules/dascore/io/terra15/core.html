@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dascore.io.terra15.core &#8212; DASCore 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for dascore.io.terra15.core</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">IO module for reading Terra15 DAS data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tables</span> <span class="k">as</span> <span class="nn">tb</span>
+
+<span class="kn">from</span> <span class="nn">dascore.constants</span> <span class="kn">import</span> <span class="n">PatchSummaryDict</span><span class="p">,</span> <span class="n">timeable_types</span>
+<span class="kn">from</span> <span class="nn">dascore.core</span> <span class="kn">import</span> <span class="n">Patch</span><span class="p">,</span> <span class="n">Stream</span>
+<span class="kn">from</span> <span class="nn">dascore.io.core</span> <span class="kn">import</span> <span class="n">FiberIO</span>
+<span class="kn">from</span> <span class="nn">dascore.utils.time</span> <span class="kn">import</span> <span class="n">to_datetime64</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_get_data</span><span class="p">,</span>
+    <span class="n">_get_default_attrs</span><span class="p">,</span>
+    <span class="n">_get_distance_array</span><span class="p">,</span>
+    <span class="n">_get_time_array</span><span class="p">,</span>
+    <span class="n">_get_version_str</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="Terra15Formatter"><a class="viewcode-back" href="../../../../api/dascore.io.terra15.core.html#dascore.io.terra15.core.Terra15Formatter">[docs]</a><span class="k">class</span> <span class="nc">Terra15Formatter</span><span class="p">(</span><span class="n">FiberIO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Support for Terra15 data format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;terra15&quot;</span>
+    <span class="n">preferred_extensions</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;hdf5&quot;</span><span class="p">,</span> <span class="s2">&quot;hf&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Terra15Formatter.get_format"><a class="viewcode-back" href="../../../../api/dascore.io.terra15.core.html#dascore.io.terra15.core.Terra15Formatter.get_format">[docs]</a>    <span class="k">def</span> <span class="nf">get_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return True if file contains terra15 version 2 data else False.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path</span>
+<span class="sd">            A path to the file which may contain terra15 data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">tb</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+                <span class="n">version_str</span> <span class="o">=</span> <span class="n">_get_version_str</span><span class="p">(</span><span class="n">fi</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">version_str</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;TERRA15&quot;</span><span class="p">,</span> <span class="n">version_str</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">tb</span><span class="o">.</span><span class="n">HDF5ExtError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">tb</span><span class="o">.</span><span class="n">NoSuchNodeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Terra15Formatter.scan"><a class="viewcode-back" href="../../../../api/dascore.io.terra15.core.html#dascore.io.terra15.core.Terra15Formatter.scan">[docs]</a>    <span class="k">def</span> <span class="nf">scan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PatchSummaryDict</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scan a terra15 v2 file, return summary information about the file&#39;s contents.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">tb</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+            <span class="n">root_attrs</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_v_attrs</span>
+            <span class="n">data_type</span> <span class="o">=</span> <span class="n">root_attrs</span><span class="o">.</span><span class="n">data_product</span>
+            <span class="n">data_node</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="p">[</span><span class="n">data_type</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">_get_default_attrs</span><span class="p">(</span><span class="n">data_node</span><span class="o">.</span><span class="n">attrs</span><span class="p">,</span> <span class="n">root_attrs</span><span class="p">)</span>
+            <span class="c1"># add time</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="p">[</span><span class="n">data_type</span><span class="p">][</span><span class="s2">&quot;gps_time&quot;</span><span class="p">]</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;time_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">to_datetime64</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;time_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">to_datetime64</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">out</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Terra15Formatter.read"><a class="viewcode-back" href="../../../../api/dascore.io.terra15.core.html#dascore.io.terra15.core.Terra15Formatter.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+        <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">timeable_types</span><span class="p">,</span> <span class="n">timeable_types</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">distance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Stream</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read a terra15 file, return a DataArray.</span>
+
+<span class="sd">        See</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO need to create h5 file decorator to avoid too many open/close files.</span>
+        <span class="k">with</span> <span class="n">tb</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+            <span class="c1"># get time arra</span>
+            <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">to_datetime64</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">time</span><span class="p">)</span>
+            <span class="c1"># get name of data group and use it to fetch data node</span>
+            <span class="n">data_type</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_v_attrs</span><span class="o">.</span><span class="n">data_product</span>
+            <span class="n">data_node</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="p">[</span><span class="n">data_type</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+            <span class="c1"># get time and distance</span>
+            <span class="n">time_ar</span> <span class="o">=</span> <span class="n">_get_time_array</span><span class="p">(</span><span class="n">fi</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span>
+            <span class="n">dist_ar</span> <span class="o">=</span> <span class="n">_get_distance_array</span><span class="p">(</span><span class="n">fi</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">tar</span><span class="p">,</span> <span class="n">dar</span> <span class="o">=</span> <span class="n">_get_data</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">time_ar</span><span class="p">,</span> <span class="n">dist_ar</span><span class="p">,</span> <span class="n">data_node</span><span class="p">)</span>
+            <span class="n">_coords</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">tar</span><span class="p">,</span> <span class="s2">&quot;distance&quot;</span><span class="p">:</span> <span class="n">dar</span><span class="p">}</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="n">_get_default_attrs</span><span class="p">(</span><span class="n">data_node</span><span class="o">.</span><span class="n">attrs</span><span class="p">,</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_v_attrs</span><span class="p">)</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;time_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tar</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;time_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tar</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;distance_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dar</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;distance_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dar</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="c1"># get slices of data and read</span>
+            <span class="n">patch</span> <span class="o">=</span> <span class="n">Patch</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="n">_coords</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Stream</span><span class="p">([</span><span class="n">patch</span><span class="p">])</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../../../../index.html">DASCore</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../markdown/executable/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../markdown/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/dasdae/dascore">Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../markdown/contributing/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../markdown/support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../io.html">dascore.io</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DASDAE Development Team.
+      
+    </div>
+
+    
+    <a href="https://github.com/DASDAE/dascore" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,17 @@
+dascore.viz package
+===================
+
+.. automodule:: dascore.viz
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   dascore.viz.core
+   dascore.viz.spectrogram
+   dascore.viz.waterfall

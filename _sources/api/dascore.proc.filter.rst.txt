@@ -1,0 +1,7 @@
+dascore.proc.filter module
+==========================
+
+.. automodule:: dascore.proc.filter
+   :members:
+   :undoc-members:
+   :show-inheritance:

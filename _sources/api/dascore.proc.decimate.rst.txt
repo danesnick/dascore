@@ -1,0 +1,7 @@
+dascore.proc.decimate module
+============================
+
+.. automodule:: dascore.proc.decimate
+   :members:
+   :undoc-members:
+   :show-inheritance:

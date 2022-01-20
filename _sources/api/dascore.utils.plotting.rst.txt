@@ -1,0 +1,7 @@
+dascore.utils.plotting module
+=============================
+
+.. automodule:: dascore.utils.plotting
+   :members:
+   :undoc-members:
+   :show-inheritance:

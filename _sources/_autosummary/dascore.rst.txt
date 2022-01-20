@@ -1,0 +1,6 @@
+﻿dascore
+=======
+
+.. currentmodule:: dascore
+
+.. automodule:: dascore

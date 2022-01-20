@@ -1,0 +1,7 @@
+dascore.examples module
+=======================
+
+.. automodule:: dascore.examples
+   :members:
+   :undoc-members:
+   :show-inheritance:

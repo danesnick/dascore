@@ -193,6 +193,75 @@
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot use relative times when reference times are null&quot;</span>
             <span class="k">raise</span> <span class="n">TimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">relative_to</span> <span class="o">+</span> <span class="n">d_time</span></div>
+
+
+<div class="viewcode-block" id="to_number"><a class="viewcode-back" href="../../../api/dascore.utils.time.html#dascore.utils.time.to_number">[docs]</a><span class="nd">@singledispatch</span>
+<span class="k">def</span> <span class="nf">to_number</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">timeable_types</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ensure a scalar or array is a number.</span>
+
+<span class="sd">    If the input values represents a time or a time-delta, convert it to a</span>
+<span class="sd">    an int representing ns.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="si">}</span><span class="s2"> is not yet supported&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="float_to_num"><a class="viewcode-back" href="../../../api/dascore.utils.time.html#dascore.utils.time.float_to_num">[docs]</a><span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">float_to_num</span><span class="p">(</span><span class="n">num</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Convert a float to a single datetime&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">num</span></div>
+
+
+<div class="viewcode-block" id="array_to_number"><a class="viewcode-back" href="../../../api/dascore.utils.time.html#dascore.utils.time.array_to_number">[docs]</a><span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">array_to_number</span><span class="p">(</span><span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert an array of floating point timestamps to an array of np.datatime64.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">array</span>
+    <span class="c1"># dealing with an array of datetime64 or empty array</span>
+    <span class="n">is_dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">)</span>
+    <span class="n">is_td</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_td</span> <span class="ow">or</span> <span class="n">is_dt</span><span class="p">:</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">to_datetime64</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_dt</span> <span class="k">else</span> <span class="n">to_timedelta64</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">array</span></div>
+
+
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">)</span>
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">datetime</span><span class="p">)</span>
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_time_to_num</span><span class="p">(</span><span class="n">datetime</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;simply return the datetime&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">to_number</span><span class="p">([</span><span class="n">to_datetime64</span><span class="p">(</span><span class="n">datetime</span><span class="p">)])[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">NaT</span><span class="p">))</span>
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">_return_number_null</span><span class="p">(</span><span class="n">null</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert non to NaT&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+
+
+<span class="nd">@to_number</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_pandas_timestamp_to_num</span><span class="p">(</span><span class="n">time_delta</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">to_number</span><span class="p">([</span><span class="n">to_timedelta64</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)])[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="is_datetime64"><a class="viewcode-back" href="../../../api/dascore.utils.time.html#dascore.utils.time.is_datetime64">[docs]</a><span class="k">def</span> <span class="nf">is_datetime64</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Return True if object is a timedelta object or array of such.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
 </pre></div>
 
           </div>

@@ -40,7 +40,124 @@
             
   <section id="module-dascore.proc.resample">
 <span id="dascore-proc-resample-module"></span><h1>dascore.proc.resample module<a class="headerlink" href="#module-dascore.proc.resample" title="Permalink to this headline">¶</a></h1>
-<p>Methods for resampling.</p>
+<p>Module for applying decimation to Patches.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.proc.resample.decimate">
+<span class="sig-prename descclassname"><span class="pre">dascore.proc.resample.</span></span><span class="sig-name descname"><span class="pre">decimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowpass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/proc/resample.html#decimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.proc.resample.decimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decimate a patch along a dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factor</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The decimation factor (e.g., 10)</p></li>
+<li><p><strong>dim</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – dimension along which to decimate.</p></li>
+<li><p><strong>lowpass</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, first apply a low-pass (anti-alis) filter. Uses
+<code class="xref py py-func docutils literal notranslate"><span class="pre">dascore.proc.filter._lowpass_cheby_2()</span></code></p></li>
+<li><p><strong>copy</strong> – If True, copy the decimated data array. This is needed if you want
+the old array to get gc’ed to free memory otherwise a view is returned.</p></li>
+<li><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>~PatchType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.proc.resample.interpolate">
+<span class="sig-prename descclassname"><span class="pre">dascore.proc.resample.</span></span><span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/proc/resample.html#interpolate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.proc.resample.interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set coordinates of patch along a dimension using interpolation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patch</strong> (<em>~PatchType</em>) – The patch object to which interpolation is applied.</p></li>
+<li><p><strong>kind</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – <p>The type of interpolation. See Notes for more details.
+If a string, the following are supported:</p>
+<blockquote>
+<div><p>linear - linear interpolation between a pair of points.
+nearest - use the nearest sample for interpolation.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>If an int, it specifies the order of spline to use. EG 1 is a linear</dt><dd><p>spline, 2 is quadratic, 3 is cubic, etc.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>**kwargs</strong> – Used to specify dimension and interpolation values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dascore.constants.PatchType</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function just uses scipy’s interp1d function under the hood.
+See :func:<a href="#id1"><span class="problematic" id="id2">`</span></a>scipy.inpterp.interp1d for information.</p>
+<p>Values for interpolation must be evenly-spaced.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p></li>
+<li><p><strong>kind</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>int</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.proc.resample.iresample">
+<span class="sig-prename descclassname"><span class="pre">dascore.proc.resample.</span></span><span class="sig-name descname"><span class="pre">iresample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/proc/resample.html#iresample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.proc.resample.iresample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample a patch along a single dimension using Fourier Method.</p>
+<p>Unlike :func: <cite>dascore.proc.resample</cite> this function requires the
+number of samples for the selected dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patch</strong> (<em>~PatchType</em>) – The patch to resample.</p></li>
+<li><p><strong>window</strong> – The Fourier-domain window that tapers the Fourier spectrum. See
+<code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.signal.resample()</span></code> for details.</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments to specify</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dascore.constants.PatchType</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Normally uses scipy.signal.resample</p>
+<p class="rubric">Examples</p>
+<p>import dascore as dc
+patch = dc.get_example_patch()
+new = patch.iresample(time=50)</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#dascore.proc.resample.iresample" title="dascore.proc.resample.iresample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iresample</span></code></a></dt><dd><dl class="field-list simple">
+<dt class="field-odd">func</dt>
+<dd class="field-odd"><p><cite>~dascore.proc.resmaple.isample</cite></p>
+</dd>
+</dl>
+</dd>
+<dt><a class="reference internal" href="#dascore.proc.resample.decimate" title="dascore.proc.resample.decimate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decimate</span></code></a></dt><dd><dl class="field-list simple">
+<dt class="field-odd">func</dt>
+<dd class="field-odd"><p><cite>~dascore.proc.resample.decimate</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>~PatchType</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

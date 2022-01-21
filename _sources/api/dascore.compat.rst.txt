@@ -1,0 +1,7 @@
+dascore.compat module
+=====================
+
+.. automodule:: dascore.compat
+   :members:
+   :undoc-members:
+   :show-inheritance:

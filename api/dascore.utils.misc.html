@@ -49,9 +49,38 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.misc.all_close">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.misc.</span></span><span class="sig-name descname"><span class="pre">all_close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ar1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ar2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/misc.html#all_close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.misc.all_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if ar1 is allcose to ar2.</p>
+<p>Just uses numpy.allclose unless ar1 is a datetime, in which case
+strict equality is used.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="dascore.utils.misc.append_func">
 <span class="sig-prename descclassname"><span class="pre">dascore.utils.misc.</span></span><span class="sig-name descname"><span class="pre">append_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">some_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/misc.html#append_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.misc.append_func" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to append a function to a list.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.misc.check_evenly_sampled">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.misc.</span></span><span class="sig-name descname"><span class="pre">check_evenly_sampled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/misc.html#check_evenly_sampled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.misc.check_evenly_sampled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if an array is evenly sampled.</p>
+<p>If not raise a ParameterError.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>array</strong> (<em>Union</em><em>[</em><em>numpy.typing._array_like._SupportsArray</em><em>[</em><em>numpy.dtype</em><em>]</em><em>, </em><em>numpy.typing._nested_sequence._NestedSequence</em><em>[</em><em>numpy.typing._array_like._SupportsArray</em><em>[</em><em>numpy.dtype</em><em>]</em><em>]</em><em>, </em><em>bool</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>complex</em><em>, </em><em>str</em><em>, </em><em>bytes</em><em>, </em><em>numpy.typing._nested_sequence._NestedSequence</em><em>[</em><em>Union</em><em>[</em><em>bool</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>complex</em><em>, </em><em>str</em><em>, </em><em>bytes</em><em>]</em><em>]</em><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.misc.get_dim_value_from_kwargs">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.misc.</span></span><span class="sig-name descname"><span class="pre">get_dim_value_from_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/misc.html#get_dim_value_from_kwargs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.misc.get_dim_value_from_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assert that kwargs contain one value and it is a dimension of patch.</p>
+<p>Several patch functions allow passing values via kwargs which are dimension
+specific. This function allows for some sane validation of such functions.</p>
+<p>Return the name of the dimension, its axis position, and its value.</p>
 </dd></dl>
 
 <dl class="py function">

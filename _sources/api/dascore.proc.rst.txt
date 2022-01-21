@@ -14,7 +14,6 @@ Submodules
 
    dascore.proc.aggregate
    dascore.proc.basic
-   dascore.proc.decimate
    dascore.proc.detrend
    dascore.proc.filter
    dascore.proc.finitediff

@@ -43,7 +43,10 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">nt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">dascore.exceptions</span> <span class="kn">import</span> <span class="n">ParameterError</span><span class="p">,</span> <span class="n">PatchDimError</span>
 
 
 <div class="viewcode-block" id="register_func"><a class="viewcode-back" href="../../../api/dascore.utils.misc.html#dascore.utils.misc.register_func">[docs]</a><span class="k">def</span> <span class="nf">register_func</span><span class="p">(</span><span class="n">list_or_dict</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -164,6 +167,60 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">num</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">num</span> <span class="o">/</span> <span class="n">sampling_period</span>
+
+
+<div class="viewcode-block" id="get_dim_value_from_kwargs"><a class="viewcode-back" href="../../../api/dascore.utils.misc.html#dascore.utils.misc.get_dim_value_from_kwargs">[docs]</a><span class="k">def</span> <span class="nf">get_dim_value_from_kwargs</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assert that kwargs contain one value and it is a dimension of patch.</span>
+
+<span class="sd">    Several patch functions allow passing values via kwargs which are dimension</span>
+<span class="sd">    specific. This function allows for some sane validation of such functions.</span>
+
+<span class="sd">    Return the name of the dimension, its axis position, and its value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">dims</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">overlap</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;You must use exactly one dimension name in kwargs. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;You passed the following kwargs: </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2"> to a patch with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;dimensions </span><span class="si">{</span><span class="n">patch</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PatchDimError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">overlap</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">dims</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dim</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="all_close"><a class="viewcode-back" href="../../../api/dascore.utils.misc.html#dascore.utils.misc.all_close">[docs]</a><span class="k">def</span> <span class="nf">all_close</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span> <span class="n">ar2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return True if ar1 is allcose to ar2.</span>
+
+<span class="sd">    Just uses numpy.allclose unless ar1 is a datetime, in which case</span>
+<span class="sd">    strict equality is used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">is_date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">ar1</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">)</span>
+    <span class="n">is_timedelta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">ar1</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_date</span> <span class="ow">or</span> <span class="n">is_timedelta</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">ar1</span> <span class="o">==</span> <span class="n">ar2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span> <span class="n">ar2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_evenly_sampled"><a class="viewcode-back" href="../../../api/dascore.utils.misc.html#dascore.utils.misc.check_evenly_sampled">[docs]</a><span class="k">def</span> <span class="nf">check_evenly_sampled</span><span class="p">(</span><span class="n">array</span><span class="p">:</span> <span class="n">nt</span><span class="o">.</span><span class="n">ArrayLike</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if an array is evenly sampled.</span>
+
+<span class="sd">    If not raise a ParameterError.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">all_close</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">)):</span>
+        <span class="n">unique_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The passed array is not evenly sampled. The values you passed&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;have the following unique differences: </span><span class="si">{</span><span class="n">unique_diffs</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ParameterError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 </pre></div>
 
           </div>

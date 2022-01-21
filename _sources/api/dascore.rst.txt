@@ -25,6 +25,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   dascore.compat
    dascore.constants
    dascore.examples
    dascore.exceptions

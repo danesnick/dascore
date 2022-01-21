@@ -56,6 +56,20 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.time.array_to_number">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">array_to_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/time.html#array_to_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.time.array_to_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an array of floating point timestamps to an array of np.datatime64.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>array</strong> (<em>numpy.array</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="dascore.utils.time.array_to_timedelta64">
 <span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">array_to_timedelta64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/time.html#array_to_timedelta64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.time.array_to_timedelta64" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert an array of floating point timestamps to an array of np.datatime64.</p>
@@ -76,6 +90,20 @@
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime64</span></code></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>num</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.time.float_to_num">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">float_to_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/time.html#float_to_num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.time.float_to_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a float to a single datetime</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><p><strong>num</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – </p>
@@ -125,6 +153,17 @@ time_max.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.time.is_datetime64">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">is_datetime64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/time.html#is_datetime64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.time.is_datetime64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if object is a timedelta object or array of such.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="dascore.utils.time.pass_time_delta">
 <span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">pass_time_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/time.html#pass_time_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.time.pass_time_delta" title="Permalink to this definition">¶</a></dt>
 <dd><p>simply return the time delta.</p>
@@ -155,6 +194,34 @@ time_max.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>obj</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>, </em><em>str</em><em>, </em><em>numpy.datetime64</em><em>, </em><em>pandas._libs.tslibs.timestamps.Timestamp</em><em>, </em><em>numpy.array</em><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dascore.utils.time.to_number">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">to_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dascore/utils/time.html#to_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dascore.utils.time.to_number" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">to_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">to_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">to_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">to_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span></em><span class="sig-paren">)</span></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">to_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span></em><span class="sig-paren">)</span></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">dascore.utils.time.</span></span><span class="sig-name descname"><span class="pre">to_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Ensure a scalar or array is a number.</p>
+<p>If the input values represents a time or a time-delta, convert it to a
+an int representing ns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>obj</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>, </em><em>str</em><em>, </em><em>numpy.datetime64</em><em>, </em><em>pandas._libs.tslibs.timestamps.Timestamp</em><em>, </em><em>numpy.array</em><em>]</em>) – </p>
 </dd>
 </dl>
 </dd></dl>

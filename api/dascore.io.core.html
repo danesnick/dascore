@@ -57,7 +57,7 @@ formats.</p>
 or return False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -81,7 +81,7 @@ example, distance=(100, 200) would only read data which distance from
 100 to 200.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>~StreamType</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">StreamType</span></code>, bound= <a class="reference internal" href="dascore.core.stream.html#dascore.core.stream.Stream" title="dascore.core.stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stream</span></code></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -147,7 +147,7 @@ try to estimate the format.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>~StreamType</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">StreamType</span></code>, bound= <a class="reference internal" href="dascore.core.stream.html#dascore.core.stream.Stream" title="dascore.core.stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stream</span></code></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -178,7 +178,8 @@ time_max
 distance_min
 distance_max
 instrument_id
-dims</p>
+dims
+tag</p>
 </dd>
 </dl>
 <dl class="field-list simple">

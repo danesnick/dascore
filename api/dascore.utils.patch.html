@@ -73,13 +73,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>patch</strong> (<em>~PatchType</em>) – The patch to validate</p></li>
+<li><p><strong>patch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)) – The patch to validate</p></li>
 <li><p><strong>required_attrs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – The expected attrs. Can be a sequence or mapping. If sequence, only
 check that attrs exist. If mapping also check that values are equal.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>~PatchType</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -91,12 +91,12 @@ check that attrs exist. If mapping also check that values are equal.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>patch</strong> (<em>~PatchType</em>) – The input patch</p></li>
-<li><p><strong>required_dims</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, …]]) – A tuple of required dimensions.</p></li>
+<li><p><strong>patch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)) – The input patch</p></li>
+<li><p><strong>required_dims</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]]) – A tuple of required dimensions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>~PatchType</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -130,7 +130,7 @@ check that attrs exist. If mapping also check that values are equal.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>patches</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[~PatchType], <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>, ~StreamType]) – A sequence of patches to merge (if compatible)</p></li>
+<li><p><strong>patches</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)], <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">StreamType</span></code>, bound= <a class="reference internal" href="dascore.core.stream.html#dascore.core.stream.Stream" title="dascore.core.stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stream</span></code></a>)]) – A sequence of patches to merge (if compatible)</p></li>
 <li><p><strong>dim</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The dimension along which to merge</p></li>
 <li><p><strong>check_history</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, only merge patches with common history. This will, for
 example, prevent merging filtered and unfiltered data together.</p></li>
@@ -140,7 +140,7 @@ with gaps &lt;= 1.5 * dt will be merged.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[~PatchType]</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -152,7 +152,7 @@ with gaps &lt;= 1.5 * dt will be merged.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>required_dims</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, …], <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – A tuple of dimensions which must be found in the Patch.</p></li>
+<li><p><strong>required_dims</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – A tuple of dimensions which must be found in the Patch.</p></li>
 <li><p><strong>required_attrs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – A dict of attributes which must be found in the Patch and whose
 values must be equal to those provided.</p></li>
 <li><p><strong>history</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[‘full’, ‘method_name’, None]) – <dl class="simple">
@@ -188,7 +188,7 @@ multiple times from within another patch function.</p>
 <dd><p>Return a dataframe</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>patches</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[~PatchType], ~StreamType]) – A sequence of <code class="xref py py-class docutils literal notranslate"><span class="pre">dascore.Patch</span></code></p>
+<dd class="field-odd"><p><strong>patches</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)], <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">StreamType</span></code>, bound= <a class="reference internal" href="dascore.core.stream.html#dascore.core.stream.Stream" title="dascore.core.stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stream</span></code></a>)]) – A sequence of <code class="xref py py-class docutils literal notranslate"><span class="pre">dascore.Patch</span></code></p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
@@ -204,7 +204,8 @@ time_max: numpy.datetime64
 distance_min: float
 distance_max: float
 instrument_id: str
-dims: str</p></li>
+dims: str
+tag: str</p></li>
 <li><p><em>plus a field called ‘patch’ which contains a reference to each patch.</em></p></li>
 </ul>
 </p>
@@ -226,12 +227,13 @@ time_max: numpy.datetime64
 distance_min: float
 distance_max: float
 instrument_id: str
-dims: str</p>
+dims: str
+tag: str</p>
 </dd>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>patch</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[~PatchType, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[~PatchType]]) – A single patch or a sequence of patches.</p>
+<dd class="field-odd"><p><strong>patch</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>), <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)]]) – A single patch or a sequence of patches.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="dascore.constants.html#dascore.constants.PatchSummaryDict" title="dascore.constants.PatchSummaryDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatchSummaryDict</span></code></a>]</p>

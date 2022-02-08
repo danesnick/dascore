@@ -80,14 +80,15 @@
     <span class="n">distance_min</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">distance_max</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">instrument_id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">dims</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="n">dims</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <span class="c1"># The expected attributes for the Patch</span>
 <span class="n">DEFAULT_PATCH_ATTRS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;d_time&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">,</span>
     <span class="s2">&quot;d_distance&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">,</span>
-    <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="s2">&quot;DAS&quot;</span><span class="p">,</span>
     <span class="s2">&quot;data_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="s2">&quot;time_min&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;NaT&quot;</span><span class="p">),</span>
@@ -101,6 +102,8 @@
     <span class="s2">&quot;instrument_id&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[],</span>
     <span class="s2">&quot;dims&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Methods FileFormatter needs to support</span>

@@ -12,6 +12,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   dascore.io.dasdae
    dascore.io.pickle
    dascore.io.terra15
    dascore.io.wav

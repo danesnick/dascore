@@ -1,0 +1,7 @@
+dascore.io.dasdae.core module
+=============================
+
+.. automodule:: dascore.io.dasdae.core
+   :members:
+   :undoc-members:
+   :show-inheritance:

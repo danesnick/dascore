@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dascore.io.dasdae.core &#8212; DASCore 0.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for dascore.io.dasdae.core</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Core module for reading and writing pickle format.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">tables</span>
+
+<span class="kn">import</span> <span class="nn">dascore</span> <span class="k">as</span> <span class="nn">dc</span>
+<span class="kn">from</span> <span class="nn">dascore.constants</span> <span class="kn">import</span> <span class="n">StreamType</span>
+<span class="kn">from</span> <span class="nn">dascore.io.core</span> <span class="kn">import</span> <span class="n">FiberIO</span>
+<span class="kn">from</span> <span class="nn">dascore.io.dasdae.utils</span> <span class="kn">import</span> <span class="n">_read_patch</span><span class="p">,</span> <span class="n">_save_patch</span><span class="p">,</span> <span class="n">_write_meta</span>
+
+
+<div class="viewcode-block" id="DASDAEIO"><a class="viewcode-back" href="../../../../api/dascore.io.dasdae.core.html#dascore.io.dasdae.core.DASDAEIO">[docs]</a><span class="k">class</span> <span class="nc">DASDAEIO</span><span class="p">(</span><span class="n">FiberIO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides IO support for the DASDAE format.</span>
+
+<span class="sd">    DASDAE format is loosely based on the Adaptable Seismic Data Format (ASDF)</span>
+<span class="sd">    which uses hdf5. The hdf5 structure looks like the following:</span>
+
+<span class="sd">    /root</span>
+<span class="sd">    /root.attrs</span>
+<span class="sd">        __format__ = &quot;DASDAE&quot;</span>
+<span class="sd">        __DASDAE_version__ = &#39;x.y.z&#39;  # version str</span>
+<span class="sd">    /root/waveforms/</span>
+<span class="sd">        DAS__{net}__{sta}__{tag}__{start}__{end}</span>
+<span class="sd">            data   # patch data array</span>
+<span class="sd">            data.attrs</span>
+<span class="sd">            _coords_{coord_name}  # each coordinate array is saved here</span>
+<span class="sd">        DAS__{net}__{sta}__{tag}__{start}__{end}.attrs</span>
+<span class="sd">            _attrs_{attr_nme}  # each patch attribute</span>
+<span class="sd">            _dims  # a str of &#39;dim1, dim2, dim3&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;DASDAE&quot;</span>
+    <span class="n">preferred_extensions</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;h5&quot;</span><span class="p">,</span> <span class="s2">&quot;hdf5&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DASDAEIO.write"><a class="viewcode-back" href="../../../../api/dascore.io.dasdae.core.html#dascore.io.dasdae.core.DASDAEIO.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read a Patch/Stream from disk.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">tables</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5</span><span class="p">:</span>
+            <span class="n">_write_meta</span><span class="p">(</span><span class="n">h5</span><span class="p">)</span>
+            <span class="c1"># get an iterable of patches and save them</span>
+            <span class="n">patches</span> <span class="o">=</span> <span class="p">[</span><span class="n">patch</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">dc</span><span class="o">.</span><span class="n">Patch</span><span class="p">)</span> <span class="k">else</span> <span class="n">patch</span>
+            <span class="n">waveforms</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">h5</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;waveforms&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">patch</span> <span class="ow">in</span> <span class="n">patches</span><span class="p">:</span>
+                <span class="n">_save_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">waveforms</span><span class="p">,</span> <span class="n">h5</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DASDAEIO.get_format"><a class="viewcode-back" href="../../../../api/dascore.io.dasdae.core.html#dascore.io.dasdae.core.DASDAEIO.get_format">[docs]</a>    <span class="k">def</span> <span class="nf">get_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the format from a dasdae file.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">tables</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+            <span class="n">is_dasdae</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># NOQA</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">):</span>
+                <span class="n">is_dasdue</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_v_attrs</span><span class="p">[</span><span class="s2">&quot;__format__&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;DASDAE&quot;</span>
+                <span class="n">dasdae_version</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_v_attrs</span><span class="p">[</span><span class="s2">&quot;__DASDAE_version__&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">is_dasdue</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">dasdae_version</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DASDAEIO.read"><a class="viewcode-back" href="../../../../api/dascore.io.dasdae.core.html#dascore.io.dasdae.core.DASDAEIO.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read a dascore file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="n">tables</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">waveform_group</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">root</span><span class="p">[</span><span class="s2">&quot;/waveforms&quot;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">dc</span><span class="o">.</span><span class="n">Stream</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">patch_group</span> <span class="ow">in</span> <span class="n">waveform_group</span><span class="p">:</span>
+                <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_read_patch</span><span class="p">(</span><span class="n">patch_group</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">dc</span><span class="o">.</span><span class="n">Stream</span><span class="p">(</span><span class="n">patches</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="../../../../index.html">DASCore</a></h1>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../markdown/executable/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../markdown/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/dasdae/dascore">Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../markdown/contributing/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../markdown/support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../../io.html">dascore.io</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DASDAE Development Team.
+      
+    </div>
+
+    
+    <a href="https://github.com/DASDAE/dascore" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

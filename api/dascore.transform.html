@@ -53,7 +53,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>patch</strong> (<em>~PatchType</em>) – The Patch object to transform.</p></li>
+<li><p><strong>patch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= dascore.Patch)) – The Patch object to transform.</p></li>
 <li><p><strong>dim</strong> – The dimension along which the transform is applied.</p></li>
 </ul>
 </dd>
@@ -65,7 +65,7 @@
 <p>The real Fourier Transform is only appropriate for real-valued data arrays.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>~PatchType</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= dascore.Patch)</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p>
@@ -80,14 +80,14 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>patch</strong> (<em>~PatchType</em>) – If not None, an axis on which to plot.</p></li>
+<li><p><strong>patch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= dascore.Patch)) – If not None, an axis on which to plot.</p></li>
 <li><p><strong>dim</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The dimension along which the spectrograms are calculated.</p></li>
 <li><p><strong>**kwargs</strong> – Passed directly to <cite>scipy.signal.spectrogram</cite> to control spectrogram
 construction.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>~PatchType</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= dascore.Patch)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -100,14 +100,14 @@ construction.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>patch</strong> (<em>~PatchType</em>) – A patch object containing das data. Note: attrs[‘data_type’] should be
+<li><p><strong>patch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= dascore.Patch)) – A patch object containing das data. Note: attrs[‘data_type’] should be
 velocity.</p></li>
 <li><p><strong>gauge_multiple</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The multiples of spatial sampling to make the simulated gauge length.</p></li>
 <li><p><strong>order</strong> – The order for the derivative operator. Second order is default.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>~PatchType</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= dascore.Patch)</p>
 </dd>
 </dl>
 </dd></dl>

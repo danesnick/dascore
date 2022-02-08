@@ -1,0 +1,16 @@
+dascore.io.dasdae package
+=========================
+
+.. automodule:: dascore.io.dasdae
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   dascore.io.dasdae.core
+   dascore.io.dasdae.utils

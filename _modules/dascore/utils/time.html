@@ -107,6 +107,7 @@
 
 
 <span class="nd">@to_datetime64</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+<span class="nd">@to_datetime64</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">NaT</span><span class="p">))</span>
 <span class="k">def</span> <span class="nf">_return_NaT</span><span class="p">(</span><span class="n">datetime</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convert non to NaT&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;NaT&quot;</span><span class="p">)</span>

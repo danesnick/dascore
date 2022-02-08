@@ -58,7 +58,7 @@ the old array to get gc’ed to free memory otherwise a view is returned.</p></l
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>~PatchType</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -70,7 +70,7 @@ the old array to get gc’ed to free memory otherwise a view is returned.</p></l
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>patch</strong> (<em>~PatchType</em>) – The patch object to which interpolation is applied.</p></li>
+<li><p><strong>patch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)) – The patch object to which interpolation is applied.</p></li>
 <li><p><strong>kind</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – <p>The type of interpolation. See Notes for more details.
 If a string, the following are supported:</p>
 <blockquote>
@@ -95,7 +95,7 @@ See :func:<a href="#id1"><span class="problematic" id="id2">`</span></a>scipy.in
 <p>Values for interpolation must be evenly-spaced.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>~PatchType</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><ul class="simple">
@@ -115,7 +115,7 @@ number of samples for the selected dimension.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>patch</strong> (<em>~PatchType</em>) – The patch to resample.</p></li>
+<li><p><strong>patch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)) – The patch to resample.</p></li>
 <li><p><strong>window</strong> – The Fourier-domain window that tapers the Fourier spectrum. See
 <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.signal.resample()</span></code> for details.</p></li>
 <li><p><strong>**kwargs</strong> – keyword arguments to specify</p></li>
@@ -150,7 +150,7 @@ new = patch.iresample(time=50)</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>~PatchType</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PatchType</span></code>, bound= <a class="reference internal" href="dascore.core.patch.html#dascore.core.patch.Patch" title="dascore.core.patch.Patch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Patch</span></code></a>)</p>
 </dd>
 <dt class="field-even">Parameters</dt>
 <dd class="field-even"><p><strong>patch</strong> (<em>dascore.constants.PatchType</em>) – </p>

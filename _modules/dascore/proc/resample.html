@@ -15,6 +15,9 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../../../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -50,7 +53,7 @@
 <span class="kn">from</span> <span class="nn">dascore.proc.filter</span> <span class="kn">import</span> <span class="n">_get_sampling_rate</span><span class="p">,</span> <span class="n">_lowpass_cheby_2</span>
 <span class="kn">from</span> <span class="nn">dascore.utils.misc</span> <span class="kn">import</span> <span class="n">check_evenly_sampled</span><span class="p">,</span> <span class="n">get_dim_value_from_kwargs</span>
 <span class="kn">from</span> <span class="nn">dascore.utils.patch</span> <span class="kn">import</span> <span class="n">get_start_stop_step</span><span class="p">,</span> <span class="n">patch_function</span>
-<span class="kn">from</span> <span class="nn">dascore.utils.time</span> <span class="kn">import</span> <span class="n">to_number</span>
+<span class="kn">from</span> <span class="nn">dascore.utils.time</span> <span class="kn">import</span> <span class="n">to_number</span><span class="p">,</span> <span class="n">to_timedelta64</span>
 
 
 <div class="viewcode-block" id="decimate"><a class="viewcode-back" href="../../../api/dascore.proc.resample.html#dascore.proc.resample.decimate">[docs]</a><span class="nd">@patch_function</span><span class="p">()</span>
@@ -206,6 +209,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dim</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">new_d_dim</span> <span class="o">=</span> <span class="n">get_dim_value_from_kwargs</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
     <span class="n">d_dim</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;d_</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>  <span class="c1"># current sampling rate</span>
+    <span class="c1"># nasty hack so that ints/floats get converted to seconds.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d_dim</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">):</span>
+        <span class="n">new_d_dim</span> <span class="o">=</span> <span class="n">to_timedelta64</span><span class="p">(</span><span class="n">new_d_dim</span><span class="p">)</span>
     <span class="c1"># dim_range = int(compat.floor((dim_stop - dim_start) / val))</span>
     <span class="n">current_sig_len</span> <span class="o">=</span> <span class="n">patch</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
     <span class="n">new_len</span> <span class="o">=</span> <span class="n">current_sig_len</span> <span class="o">*</span> <span class="p">(</span><span class="n">d_dim</span> <span class="o">/</span> <span class="n">new_d_dim</span><span class="p">)</span>

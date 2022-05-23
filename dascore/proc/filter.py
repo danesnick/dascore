@@ -106,7 +106,7 @@ def pass_filter(patch: PatchType, corners=4, zerophase=True, **kwargs) -> PatchT
     Examples
     --------
     >>> import dascore
-    >>> pa = dascore.get_example_patch()
+    >>> pa = dascore.get_example_array()
 
     >>>  # 1. Apply bandpass filter along time axis from 1 to 100 Hz
     >>> bandpassed = pa.pass_filter(time=(1, 100))

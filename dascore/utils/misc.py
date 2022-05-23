@@ -80,7 +80,7 @@ def _pass_through_method(func):
     return _func
 
 
-def get_slice(array, cond=Optional[tuple]) -> slice:
+def get_slice(array, cond: Optional[tuple] = None) -> slice:
     """
     Return a slice object which meets conditions in cond on array.
 

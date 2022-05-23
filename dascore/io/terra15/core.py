@@ -1,15 +1,19 @@
 """
 IO module for reading Terra15 DAS data.
 """
+import os
 from pathlib import Path
 from typing import List, Optional, Union
 
 import numpy as np
 import tables as tb
+import xarray as xr
+from xarray.backends import BackendEntrypoint
 
 from dascore.constants import PatchSummaryDict, timeable_types
 from dascore.core import Patch, Stream
 from dascore.io.core import FiberIO
+from dascore.utils.misc import get_slice
 from dascore.utils.time import to_datetime64
 
 from .utils import (
@@ -19,6 +23,99 @@ from .utils import (
     _get_time_array,
     _get_version_str,
 )
+
+
+class Terra15BackendEntry(BackendEntrypoint):
+    """
+    Xarray support for reading terra15 data.
+    """
+
+    def open_dataset(
+        self,
+        filename_or_obj,
+        *,
+        drop_variables=None,
+        decode_times=True,
+        decode_timedelta=True,
+        decode_coords=True,
+        my_backend_option=None,
+    ):
+        """Open the terra15 dataset."""
+        with tb.open_file(filename_or_obj) as fi:
+
+            vars, attrs, coords = open_terra15_dataset(
+                fi,
+                decode_times=decode_times,
+            )
+            ds = xr.Dataset(vars, attrs=attrs, coords=coords)
+            ds.set_close(fi.close)
+        return ds
+
+    def guess_can_open(self, filename_or_obj):
+        """
+        Guess if the file is a terra15 hdf5.
+
+        TODO: This should be more specific.
+        """
+        try:
+            _, ext = os.path.splitext(filename_or_obj)
+        except TypeError:
+            return False
+        return ext in {".hdf5"}
+
+
+def open_terra15_dataset(fi, decode_times=True):
+    """Open and load a terra15 file."""
+
+    def _get_coords(fi, data_type):
+        """get coordinates."""
+        # get time array
+        time_ar = fi.root[data_type]["gps_time"].read()
+        if decode_times:
+            time_ar = to_datetime64(time_ar)
+        # get distance array
+        attrs = fi.root._v_attrs
+        dist_ar = (np.arange(attrs.nx) * attrs.dx) + attrs.sensing_range_start
+        # return coords
+        _coords = {"time": time_ar, "distance": dist_ar}
+        return _coords
+
+    def _get_data(coords, data_node):
+        """
+        Get the data array. Slice based on input and check for 0 blocks. Also
+        return sliced coordinates.
+        """
+        # need to handle empty data blocks. This happens when data is stopped
+        # recording before the pre-allocated file is filled.
+        time_array, dist_array = coords["time"], coords["distance"]
+        time = None
+        if time_array[-1] < time_array[0]:
+            time = (time_array[0], time_array.max())
+        tslice = get_slice(coords["time"], time)
+        dslice = get_slice(dist_array, None)
+        new_coords = {"time": time_array[tslice], "distance": dist_array[dslice]}
+        # TODO here is where the lazy array thing needs to go.
+        return data_node[tslice, dslice], new_coords
+
+    def _get_attrs(coords):
+        """Get attributes for data file."""
+        tar, dar = coords["time"], coords["distance"]
+        attrs = _get_default_attrs(data_node.attrs, fi.root._v_attrs)
+        attrs["time_min"] = tar.min()
+        attrs["time_max"] = tar.max()
+        attrs["distance_min"] = dar.min()
+        attrs["distance_max"] = dar.max()
+
+    # get name of data group and use it to fetch data node
+    data_type = fi.root._v_attrs.data_product
+    data_node = fi.root[data_type]["data"]
+    # get coords and data
+    _coords = _get_coords(fi, data_type)
+    data, new_coords = _get_data(_coords, data_node)
+    attrs = _get_attrs(new_coords)
+    # get slices of data and read
+    var = {0: xr.DataArray(data, coords=new_coords, attrs=attrs)}
+    return var, new_coords, attrs
 
 
 class Terra15Formatter(FiberIO):
@@ -74,7 +171,7 @@ class Terra15Formatter(FiberIO):
         path: Union[str, Path],
         time: Optional[tuple[timeable_types, timeable_types]] = None,
         distance: Optional[tuple[float, float]] = None,
-        **kwargs
+        **kwargs,
     ) -> Stream:
         """
         Read a terra15 file, return a DataArray.

@@ -6,7 +6,7 @@ from xarray import set_options
 
 from dascore.core.patch import Patch
 from dascore.core.stream import Stream
-from dascore.examples import get_example_patch, get_example_stream
+from dascore.examples import get_example_array, get_example_dataset
 from dascore.io.core import get_format, read, scan_file, write
 from dascore.utils.patch import patch_function
 from dascore.version import __version__

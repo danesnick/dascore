@@ -31,8 +31,8 @@ def select(patch: PatchType, *, copy=False, **kwargs) -> PatchType:
     --------
     >>> # select meters 50 to 300
     >>> import numpy as np
-    >>> from dascore.examples import get_example_patch
-    >>> tr = get_example_patch()
+    >>> from dascore.examples import get_example_array
+    >>> tr = get_example_array()
     >>> new = tr.select(distance=(50,300))
     """
     # do special thing for time, else just use DataArray select

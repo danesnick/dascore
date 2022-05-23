@@ -15,8 +15,8 @@ def select(self, **kwargs):
 
     Examples
     --------
-    >>> from dascore.examples import get_example_patch
-    >>> tr = get_example_patch()
+    >>> from dascore.examples import get_example_array
+    >>> tr = get_example_array()
     >>> new = tr.select(distance=(50,300))
     """
     if not len(kwargs):

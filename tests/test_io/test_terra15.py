@@ -4,10 +4,50 @@ Tests for reading terra15 file formats.
 import numpy as np
 import pytest
 import tables as tb
+import xarray as xr
+from xarray.backends.plugins import get_backend
 
 import dascore
 from dascore.constants import REQUIRED_DAS_ATTRS
-from dascore.io.terra15.core import Terra15Formatter
+from dascore.io.terra15.core import Terra15BackendEntry, Terra15Formatter
+
+
+@pytest.fixture(scope="class")
+def terra15_dataarray(terra15_das_example_path):
+    """Load the terra15 example data array"""
+    dar = xr.load_dataarray(terra15_das_example_path, engine="terra15")
+    return dar
+
+
+class TestOpenDataset:
+    """Tests for opening a terra15 dataset."""
+
+    def test_engine_backend_registered(self):
+        """Ensure the terra15 backend is registered by xarray."""
+        back = get_backend("terra15")
+        assert back is Terra15BackendEntry or isinstance(back, Terra15BackendEntry)
+
+    def test_load_dataset(self, terra15_das_example_path, terra15_dataarray):
+        """Ensure the data can be loaded into a dataset."""
+        ds = xr.load_dataset(terra15_das_example_path, engine="terra15")
+        assert isinstance(ds, xr.Dataset)
+        assert len(set(ds)) == 1
+        (dar,) = ds.values()
+        assert dar.equals(terra15_dataarray)
+
+    def test_autodetect_format(self, terra15_das_example_path, terra15_dataarray):
+        """Ensure auto-detection of file format."""
+        dar1 = xr.load_dataarray(terra15_das_example_path)
+        (dar2,) = xr.load_dataset(terra15_das_example_path).values()
+        assert dar1.equals(dar2)
+        assert dar2.equals(terra15_dataarray)
+
+    def test_terra15_dataarray(self, terra15_dataarray):
+        """Simple tests for terra15 data array"""
+        dar = terra15_dataarray
+        assert isinstance(dar, xr.DataArray)
+        assert len(dar.shape) == 2
+        assert dar.dims == ("time", "distance")
 
 
 class TestReadTerra15:

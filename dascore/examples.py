@@ -7,21 +7,21 @@ import dascore
 from dascore.utils.misc import register_func
 from dascore.utils.time import to_timedelta64
 
-EXAMPLE_PATCHES = {}
-EXAMPLE_STREAMS = {}
+EXAMPLE_ARRAYS = {}
+EXAMPLE_DATASET = {}
 
 
-def get_example_patch(example_name="random_das"):
+def get_example_array(example_name="random_das"):
     """Load an example Patch."""
-    return EXAMPLE_PATCHES[example_name]()
+    return EXAMPLE_ARRAYS[example_name]()
 
 
-def get_example_stream(example_name="random_das"):
+def get_example_dataset(example_name="random_das"):
     """Load an example Patch."""
-    return EXAMPLE_STREAMS[example_name]()
+    return EXAMPLE_DATASET[example_name]()
 
 
-@register_func(EXAMPLE_PATCHES, key="random_das")
+@register_func(EXAMPLE_ARRAYS, key="random_das")
 def _random_patch():
     """Generate a random DAS Patch"""
     rand = np.random.RandomState(13)
@@ -42,7 +42,7 @@ def _random_patch():
     return dascore.Patch(**out)
 
 
-@register_func(EXAMPLE_STREAMS, key="random_das")
+@register_func(EXAMPLE_DATASET, key="random_das")
 def _random_stream():
     """Generate a random DAS Patch"""
     out = _random_patch()

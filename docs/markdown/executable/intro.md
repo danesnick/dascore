@@ -21,7 +21,8 @@ A section of contiguous (or nearly so) fiber data is called a Patch. These can b
 
 ```python
 import dascore
-pa = dascore.get_example_patch()
+
+pa = dascore.get_example_array()
 ```
 
 ### 2. Load a file
@@ -77,12 +78,13 @@ The patch has several methods which are intended to be chained together via a [f
 
 ```python
 import dascore
-pa = dascore.get_example_patch()
+
+pa = dascore.get_example_array()
 
 out = (
     pa.decimate(8)  # decimate to reduce data volume by 8 along time dimension
-    .detrend(dim='distance')  # detrend along distance dimension
-    .pass_filter(time=(None, 10))  # apply a low-pass 10 Hz butterworth filter
+        .detrend(dim='distance')  # detrend along distance dimension
+        .pass_filter(time=(None, 10))  # apply a low-pass 10 Hz butterworth filter
 )
 ```
 

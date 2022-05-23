@@ -110,18 +110,18 @@ def terra15_das_patch(terra15_das_example_path) -> Patch:
 @register_func(PATCH_FIXTURES)
 def random_patch() -> Patch:
     """Init a random array."""
-    from dascore.examples import get_example_patch
+    from dascore.examples import get_example_array
 
-    return get_example_patch("random_das")
+    return get_example_array("random_das")
 
 
 @pytest.fixture(scope="session")
 @register_func(STREAM_FIXTURES)
 def random_stream() -> Stream:
     """Init a random array."""
-    from dascore.examples import get_example_stream
+    from dascore.examples import get_example_dataset
 
-    return get_example_stream("random_das")
+    return get_example_dataset("random_das")
 
 
 @pytest.fixture(scope="session", params=PATCH_FIXTURES)

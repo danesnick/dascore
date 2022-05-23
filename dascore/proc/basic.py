@@ -65,8 +65,8 @@ def rename(self: PatchType, **names) -> PatchType:
 
     Examples
     --------
-    >>> from dascore.examples import get_example_patch
-    >>> pa = get_example_patch()
+    >>> from dascore.examples import get_example_array
+    >>> pa = get_example_array()
     >>> # rename dim "distance" to "fragrance"
     >>> pa2 = pa.rename(distance='fragrance')
     >>> assert 'fragrance' in pa2.dims
